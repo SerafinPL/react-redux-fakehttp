@@ -11,17 +11,6 @@ class NewPost extends Component {
         title: '',
         content: '',
         author: 'Kuba',
-        submitted: false
-    }
-
-    componentDidMount(){
-
-        const query = new URLSearchParams(this.props.location.search);
-        console.log(query.entries());
-        for (let param of query.entries()) {
-            console.log(param); // yields ['start', '5']
-        }
-        //console.log(this.props);
     }
 
     postDataHandler = () => {
@@ -33,10 +22,7 @@ class NewPost extends Component {
 
         axios.post('/posts', sendPost)
         .then(response => {
-            //this.props.history.push('/posts'); // dołożenie do stosu
-            this.props.history.replace('/posts'); // zamiana bez możliwości powrotu
-            //this.setState({submitted : true}); 
-            //console.log(response);//fake 
+            this.props.history.replace('/posts'); 
         });
     }
 
@@ -44,15 +30,9 @@ class NewPost extends Component {
 
     render () {
 
-        let redirect = null;
-
-        if (this.state.submitted) {
-           redirect = <Redirect to='/posts'/>;
-        }
-
         return (
             <div className="NewPost">
-                 {redirect}
+                 
                 <h1>Dodaj Post</h1>
                 <label>Tytuł</label>
                 <input type="text" value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />

@@ -6,6 +6,13 @@ import registerServiceWorker from './registerServiceWorker';
 
 import axios from 'axios';
 
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import reducer from './store/reducer';
+
+const storeBox = createStore(reducer, applyMiddleware(thunk));
+
 
 axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
@@ -32,5 +39,12 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
  	return Promise.reject(error); // must return aby zadziałały lokalne wykrywacze errorów
  });
 
-ReactDOM.render( <App />, document.getElementById( 'root' ) );
+ReactDOM.render( 
+	<Provider store={storeBox}>
+		<App />
+	</Provider>, 
+
+	document.getElementById( 'root' ) );
+
+
 registerServiceWorker();
