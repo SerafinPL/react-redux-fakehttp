@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 
 //import axiosInstance from '../../../axios';
 
@@ -11,57 +11,52 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../../store/actionCreators';
 
 
-class Posts extends Component{
+const Posts = (props) => {
 
 
-	state = {
-        posts: [],
-        error: null,
-        load: true
-        
-    }
 
 
-    componentDidMount(){
-        console.log(this.props);
-        this.props.RedDisStore();
-    }
+    useEffect(()=>{
+        //console.log(props);
+        props.RedDisStore();
+    })
+    
 
-    postSelectedHandler = (id) => {
-        this.props.history.push('/posts/' + id);
+    const postSelectedHandler = (id) => {
+        props.history.push('/posts/' + id);
 
     }
 
-	render(){
+	
 
-		let posts = <p style={{textAlign : 'center'}}>Ładowanie postów</p>
+	let posts = <p style={{textAlign : 'center'}}>Ładowanie postów</p>
 
-        if (this.props.RedError) {posts = <p style={{textAlign : 'center'}}>Coś jest nie tak pojawił się ERROR</p>};
+    if (props.RedError) {posts = <p style={{textAlign : 'center'}}>Coś jest nie tak pojawił się ERROR</p>};
 
-        if (!this.props.RedError && this.props.RedLoad){
-            posts = this.props.RedPost.map(post => {
-                return( 
-                    <Post 
-                        key={post.id}
-                        title={post.title}
-                        author={post.author}
-                        clicked={() => this.postSelectedHandler(post.id)}
-                    />
-                );//return
-            });//map
-        }; //if
+    if (!props.RedError && props.RedLoad){
+        posts = props.RedPost.map(post => {
+            return( 
+                <Post 
+                    key={post.id}
+                    title={post.title}
+                    author={post.author}
+                    clicked={() => postSelectedHandler(post.id)}
+                />
+            );//return
+        });//map
+    }; //if
 
 
-		return(
-            <div>
-                <Route path={this.props.match.url + '/:postId'} exact component={FullPost} />
-				<section className="Posts">
-                    {posts}
-                </section>
-                
-            </div>
-			);
-	}
+	return(
+        <div>
+            <Route path={props.match.url + '/:postId'} exact component={FullPost} />
+			<section className="Posts">
+                {posts}
+            </section>
+            
+        </div>
+		);
+	
 }
 
 const mapStateToProps = state => {

@@ -1,69 +1,62 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
 import './FullPost.css';
 
-class FullPost extends Component {
+const FullPost =(props) => {
 
-    state = {
-        loadedPost: null
-    }
+    const [loadedPostHook, loadedPostSetHook] = useState(null) 
     
-    componentDidMount() {
-        this.loadedData();
-    }
-
-    componentDidUpdate() {
-        this.loadedData();
-    }
-
-    loadedData() {
-        console.log(this.props);
-        if (this.props.match.params.postId){
-            if (!this.state.loadedPost || ( this.state.loadedPost && this.state.loadedPost.id !== +this.props.match.params.postId )){
-                axios.get('/posts/' + this.props.match.params.postId)
+    
+    useEffect(()=>{
+        loadedData();
+    });
+    
+    const loadedData = () => {
+        if (props.match.params.postId){
+            if (!loadedPostHook || 
+                ( loadedPostHook && loadedPostHook.id !== +props.match.params.postId )){
+                axios.get('/posts/' + props.match.params.postId)
                     .then(response => {
-                    //console.log(response);
-                    this.setState({loadedPost: response.data});
+                        loadedPostSetHook(response.data);
                     })
                     .catch(error =>{
-                        this.setState({loadedPost: {title: 'błąd odczytu'}});
+                        loadedPostSetHook({title: 'błąd odczytu'});
                     });
             }
-            
         }
     }
 
-    deletePostHandler = () =>{
-        axios.delete('/posts/' + this.props.match.params.postId)
+    const deletePostHandler = () =>{
+        axios.delete('/posts/' + props.match.params.postId)
         .then(response => {
             console.log(response);//fake delete
-            this.props.history.push('/posts');
+            props.history.push('/posts');
         });
     }
 
-    render () {
+    //render () {
         let post = <p style={{textAlign: 'center'}}>Nie odnaleziono takiego fake posta!</p>;
         
-        if (this.props.match.params.postId){
+        if (props.match.params.postId){
             post = <p style={{textAlign: 'center'}}>Ładowanie...</p>;
         }
 
-        if (this.state.loadedPost){
+        if (loadedPostHook){
             post = (
                 <div className="FullPost">
-                    <h1>{this.state.loadedPost.title}</h1>
-                    <p>{this.state.loadedPost.body}</p>
+                    <h1>{loadedPostHook.title}</h1>
+                    <p>{loadedPostHook.body}</p>
                     <div className="Edit">
-                        <button className="Delete" onClick={this.deletePostHandler}>Usuń Post</button>
+                        <button className="Delete" onClick={deletePostHandler}>Usuń Post</button>
                     </div>
                 </div>
 
             );
         }
         return post;
-    }
+    //}
 }
 
 export default FullPost;
