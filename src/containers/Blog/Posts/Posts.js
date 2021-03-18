@@ -25,26 +25,6 @@ class Posts extends Component{
     componentDidMount(){
         console.log(this.props);
         this.props.RedDisStore();
-    // axiosInstance.get('/posts')
-    // .then(response => {
-    //     const posts = response.data.slice(0, 5);
-    //     const updatedPosts = posts.map(post => {
-    //         return {
-    //             ...post,
-    //             author: 'Kuba'
-    //         }
-    //     });
-    //     this.setState({
-    //         posts: updatedPosts,
-    //         load: true
-    //     })
-    //     //console.log(response);
-    // })
-    // .catch(error => {
-    //     // handle error
-    //     console.log(error);
-    //     this.setState({error: true})
-    // });
     }
 
     postSelectedHandler = (id) => {

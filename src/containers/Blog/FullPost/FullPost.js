@@ -39,6 +39,7 @@ class FullPost extends Component {
         axios.delete('/posts/' + this.props.match.params.postId)
         .then(response => {
             console.log(response);//fake delete
+            this.props.history.push('/posts');
         });
     }
 

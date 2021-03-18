@@ -18,7 +18,8 @@ const reducer = (state = initialState, action) => {
 					...state,
 					posts: state.posts.concat(action.result),
 					loaded : true,
-					load: true
+					load: true,
+					error: false
 				}
 			} else if (action.error) {
 				return {
