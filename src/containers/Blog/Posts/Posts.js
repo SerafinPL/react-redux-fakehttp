@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import axiosInstance from '../../../axios';
+//import axiosInstance from '../../../axios';
 
 import Post from '../../../components/Post/Post';
 import './Posts.css';
@@ -17,7 +17,7 @@ class Posts extends Component{
 	state = {
         posts: [],
         error: null,
-        load:true
+        load: true
         
     }
 
@@ -56,32 +56,29 @@ class Posts extends Component{
 
 		let posts = <p style={{textAlign : 'center'}}>Ładowanie postów</p>
 
-        if (this.state.error) {posts = <p style={{textAlign : 'center'}}>Coś jest nie tak pojawił się ERROR</p>};
+        if (this.props.RedError) {posts = <p style={{textAlign : 'center'}}>Coś jest nie tak pojawił się ERROR</p>};
 
-        if (!this.state.error && this.state.load){
-        posts = this.props.RedPost.map(post => {
-
-                return( //<Link to={'/' +post.id} key={post.id}>
-                            <Post 
-                                key={post.id}
-                                title={post.title}
-                                author={post.author}
-                                clicked={() => this.postSelectedHandler(post.id)}
-                            />
-                        //</Link>
-                        );
-            }
-            );
-        }; 
+        if (!this.props.RedError && this.props.RedLoad){
+            posts = this.props.RedPost.map(post => {
+                return( 
+                    <Post 
+                        key={post.id}
+                        title={post.title}
+                        author={post.author}
+                        clicked={() => this.postSelectedHandler(post.id)}
+                    />
+                );//return
+            });//map
+        }; //if
 
 
 		return(
             <div>
-                
+                <Route path={this.props.match.url + '/:postId'} exact component={FullPost} />
 				<section className="Posts">
                     {posts}
                 </section>
-                <Route path={this.props.match.url + '/:postId'} exact component={FullPost} />
+                
             </div>
 			);
 	}
@@ -90,7 +87,9 @@ class Posts extends Component{
 const mapStateToProps = state => {
     return {
         RedAuth: state.auth,
-        RedPost: state.posts
+        RedPost: state.posts,
+        RedError: state.error,
+        RedLoad: state.load
     };
 };
 
