@@ -6,12 +6,15 @@ import registerServiceWorker from './registerServiceWorker';
 
 import axios from 'axios';
 
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './store/reducer';
 
-const storeBox = createStore(reducer, applyMiddleware(thunk));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const storeBox = createStore(reducer, composeEnhancers( applyMiddleware(thunk) ));
+
 
 
 axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';

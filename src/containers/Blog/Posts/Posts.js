@@ -19,7 +19,7 @@ const Posts = (props) => {
     useEffect(()=>{
         //console.log(props);
         props.RedDisStore();
-    })
+    },[])
     
 
     const postSelectedHandler = (id) => {
