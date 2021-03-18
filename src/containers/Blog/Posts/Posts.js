@@ -7,6 +7,9 @@ import './Posts.css';
 import { Link, Route } from 'react-router-dom'
 import FullPost from '../FullPost/FullPost';
 
+import { connect } from 'react-redux';
+import * as actionCreators from '../../../store/actionCreators';
+
 
 class Posts extends Component{
 
@@ -14,39 +17,37 @@ class Posts extends Component{
 	state = {
         posts: [],
         error: null,
-        load:false
+        load:true
         
     }
 
 
     componentDidMount(){
         console.log(this.props);
-
-    axiosInstance.get('/posts')
-    .then(response => {
-        const posts = response.data.slice(0, 5);
-        const updatedPosts = posts.map(post => {
-            return {
-                ...post,
-                author: 'Kuba'
-            }
-        });
-        this.setState({
-            posts: updatedPosts,
-            load: true
-        })
-        //console.log(response);
-    })
-    .catch(error => {
-        // handle error
-        console.log(error);
-        this.setState({error: true})
-    });
+        this.props.RedDisStore();
+    // axiosInstance.get('/posts')
+    // .then(response => {
+    //     const posts = response.data.slice(0, 5);
+    //     const updatedPosts = posts.map(post => {
+    //         return {
+    //             ...post,
+    //             author: 'Kuba'
+    //         }
+    //     });
+    //     this.setState({
+    //         posts: updatedPosts,
+    //         load: true
+    //     })
+    //     //console.log(response);
+    // })
+    // .catch(error => {
+    //     // handle error
+    //     console.log(error);
+    //     this.setState({error: true})
+    // });
     }
 
     postSelectedHandler = (id) => {
-        //this.setState({selectedPostId: id});
-        //this.props.history.push({pathname: '/posts/' + id});
         this.props.history.push('/posts/' + id);
 
     }
@@ -58,7 +59,7 @@ class Posts extends Component{
         if (this.state.error) {posts = <p style={{textAlign : 'center'}}>Coś jest nie tak pojawił się ERROR</p>};
 
         if (!this.state.error && this.state.load){
-        posts = this.state.posts.map(post => {
+        posts = this.props.RedPost.map(post => {
 
                 return( //<Link to={'/' +post.id} key={post.id}>
                             <Post 
@@ -86,6 +87,19 @@ class Posts extends Component{
 	}
 }
 
-export default Posts;				
+const mapStateToProps = state => {
+    return {
+        RedAuth: state.auth,
+        RedPost: state.posts
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return{
+        RedDisStore: () => dispatch(actionCreators.getPost())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);				
 
 				
